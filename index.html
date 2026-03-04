@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Earth</title>
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+<!-- daisyUI and tailwind -->
+ <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<!-- font awesome cdn -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    .font-inter{
+        font-family: "Inter", sans-serif;
+    }
+</style>
+</head>
+<body class="font-inter">
+    <!-- Dynamic Section -->
+  <!-- Categories -->
+    <section>
+        <h2 class="text-center font-semibold text-[32px]">Choose Your Trees</h2>
+
+        <div class="grid grid-cols-4 w-11/12 mx-auto text-center mt-10">
+            <div class="col-span-1">
+                <p class="font-semibold text-[20px] mb-6">Category</p>
+                <div id="cat-btn">
+                    <button class="btn btn-success w-full mb-3 justify-start">All Trees</button>
+                </div>
+            </div>
+
+            <!-- Plant Section -->
+            <div class="col-span-2">
+              <div id = "plant-div"class="grid grid-cols-3 gap-4">
+                
+               
+              </div>
+            </div> 
+            <div class="col-span-1">
+                Cart
+            </div>
+        </div>
+    </section>
+    <script src="./earth.js"></script>
+</body>
+</html>
