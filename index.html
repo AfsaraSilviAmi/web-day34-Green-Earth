@@ -37,16 +37,41 @@
 
             <!-- Plant Section -->
             <div class="col-span-2 mt-10">
-              <div id = "plant-div"class="grid grid-cols-3 gap-4">
+              <div id = "plant-div" class="grid grid-cols-3 gap-4">
                 
                
               </div>
             </div> 
-            <div class="col-span-1">
-                  <p class="font-semibold text-[20px] mb-6">Cart</p>
+            <!-- cart -->
+            <div class="col-span-1"> 
+                  <p class="font-semibold text-[20px] mb-6">Your Cart</p>
+                  <div id = "cart-div">
+                       
+                  </div>
+                  <div id = "cart-total" class="flex justify-between">
+                    
+                  </div>
             </div>
         </div>
     </section>
+   <section>
+    <!-- <button class="btn" onclick="myModal.showModal()">open modal</button> -->
+<dialog id="myModal" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <div id="detailContainer">
+
+               </div>
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+   </section>
     <script src="./earth.js"></script>
 </body>
 </html>

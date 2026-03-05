@@ -1,3 +1,5 @@
+let allPlants = [];
+let cart = [];
 //load categories btn
 const loadCategory = () =>{
     const url = "https://openapi.programming-hero.com/api/categories";
@@ -25,6 +27,7 @@ const loadPlant = (id) =>{
     .then((res)=>res.json())
     .then((data)=>{
       nonActiveBtn(`category-${id}`);
+      allPlants = data.plants;
       displayPlant(data.plants)
     });
 }
@@ -39,19 +42,19 @@ plants.forEach(plant =>{
     makePlantDiv.innerHTML = `
       <div class="card bg-base-200 shadow-sm px-2 pt-2 w-full h-95">
   <figure>
-    <img
+    <img onclick = "loadPlantDetail(${plant.id})"
       src="${plant.image}"
       alt="${plant.name}"/>
   </figure>
   <div class="card-body pl-0 pr-0 pt-1 w-full"> 
-    <h2 class="card-title">${plant.name}</h2>
-    <p class= "line-clamp-2 text-left">${plant.description}</p>
+    <h2 onclick = "loadPlantDetail(${plant.id})" class="card-title">${plant.name}</h2>
+    <p onclick = "loadPlantDetail(${plant.id})" class= "line-clamp-2 text-left">${plant.description}</p>
     <div class="flex justify-between">
     <div class="badge border border-green-500 bg-green-100 text-green-400 p-2">${plant.category}</div>
     <p class="text-right font-semibold">৳${plant.price}</p>
     </div>
     <div class="card-actions">
-      <button class="add-cart-btn btn btn-primary w-full mt-3 bg-green-800 rounded-2xl border-none">Add to Cart</button>
+      <button id = "add-cart-${plant.id}" class="add-cart-btn btn btn-primary w-full mt-3 bg-green-800 rounded-2xl border-none">Add to Cart</button>
     </div>
   </div>
 </div>
@@ -69,6 +72,7 @@ const loadAllPlant = () =>{
   .then((res)=>res.json())
   .then((data)=>{
     nonActiveBtn("all-tree-btn");
+    allPlants = data.plants;
     displayAllPlant(data.plants)
   });
 }
@@ -81,21 +85,21 @@ PlantDiv.innerHTML = "";
 plants.forEach(plant =>{
     const makePlantDiv = document.createElement("div");
     makePlantDiv.innerHTML = `
-      <div class="card bg-base-200 shadow-sm px-2 pt-2 w-full h-95">
+      <div  class="card bg-base-200 shadow-sm px-2 pt-2 w-full h-95">
   <figure>
-    <img
+    <img onclick = "loadPlantDetail(${plant.id})"
       src="${plant.image}"
       alt="${plant.name}"/>
   </figure>
   <div class="card-body pl-0 pr-0 pt-1 w-full"> 
-    <h2 class="card-title">${plant.name}</h2>
-    <p class= "line-clamp-2 text-left">${plant.description}</p>
+    <h2 onclick = "loadPlantDetail(${plant.id})" class="card-title">${plant.name}</h2>
+    <p onclick = "loadPlantDetail(${plant.id})" class= "line-clamp-2 text-left">${plant.description}</p>
     <div class="flex justify-between">
     <div class="badge border border-green-500 bg-green-100 text-green-400 p-2">${plant.category}</div>
     <p class="text-right font-semibold">৳${plant.price}</p>
     </div>
     <div class="card-actions">
-      <button class="add-cart-btn btn btn-primary w-full mt-3 bg-green-800 rounded-2xl border-none">Add to Cart</button>
+      <button id = "add-cart-${plant.id}" class="add-cart-btn btn btn-primary w-full mt-3 bg-green-800 rounded-2xl border-none">Add to Cart</button>
     </div>
   </div>
 </div>
@@ -116,10 +120,95 @@ if(activeBtn){
    activeBtn.classList.add("btn-success");
 }
 }
+//add to cart
+document.getElementById("plant-div").addEventListener("click", (e) => {
 
-const cartBtn = document.querySelectorAll(".add-cart-btn");
+  if (e.target.classList.contains("add-cart-btn")) {
+   const id = e.target.id.split("-")[2]; // "add-cart-5" -> 5
+   const plant = allPlants.find(p => p.id == id);
 
+   addToCart(plant);
+  }
+
+});
+//to increase quantity and push values
+const addToCart = (plant) =>{
+ 
+  const existing = cart.find(item => item.id == plant.id);
+
+  if(existing){
+    existing.quantity++;
+  }
+  else{
+    cart.push({
+      id : plant.id,
+      name : plant.name,
+      price : plant.price,
+      quantity : 1,
+
+    })
+  }
+ displayCart();
+}
+
+
+const displayCart = ()=>{
+let CartDiv = document.getElementById("cart-div");
+let TotalDiv = document.getElementById("cart-total");
+CartDiv.innerHTML = "";
+let total = 0;
+cart.forEach(item =>{
+    const makeCartDiv = document.createElement("div");
+    makeCartDiv.innerHTML = `
+      <div class="flex justify-between bg-gray-200 p-4 rounded-lg">
+                        <div>
+                        <p class="font-semibold text-[18px]">${item.name}</p>
+                        <p class="text-gray-600 text-[16px]">৳${item.price} X ${item.quantity}</p>
+                        </div>
+                        <div>
+                            <button onclick = "cross('${item.id}')" class="text-gray-600 text-[16px] btn">X</button>
+                        </div>
+                       </div>
+    `
+    CartDiv.append(makeCartDiv);
+
+    total = total + item.price * item.quantity;
+})
+  TotalDiv.innerHTML = `
+         <p>Total</p>
+          <p>৳${total}</p>
+  `
+}
+const cross = (id) =>{
+   cart = cart.filter(item => item.id !=id); 
+   displayCart(); 
+  }
+
+//load plant detail
+const loadPlantDetail = (id) =>{
+    const url = `https://openapi.programming-hero.com/api/plant/${id}`;
+    fetch(url)
+    .then((res)=>res.json())
+    .then((data)=>displayPlantDetail(data.plants));
+}
+
+//display plant detail
+const displayPlantDetail =(plant) =>{
+ const detailDiv = document.getElementById("detailContainer");
+ detailDiv.innerHTML = `
+ <figure>
+    <img class="h-80"
+      src="${plant.image}"
+      alt="${plant.name}"/>
+  </figure>
+  <h2 class="card-title">${plant.name}</h2>
+    <p class= "text-left">${plant.description}</p>
+ `
+ document.getElementById("myModal").showModal();
+}
 
 loadCategory();
 loadAllPlant();
+loadPlantDetail();
+
 
